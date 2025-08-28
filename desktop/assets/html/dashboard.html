@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Arial; background:#f8fafc; margin:0; padding:16px; color:#0f172a; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap:16px; }
+    .card { background: white; border-radius: 14px; box-shadow: 0 1px 2px rgba(0,0,0,.06); padding:16px; }
+    .title { font-size: 18px; font-weight: 700; margin:0 0 8px; }
+    .badge { display:inline-block; background:#fee2e2; color:#b91c1c; border-radius:999px; padding:4px 10px; font-weight:600; font-size:12px; margin-right:6px;}
+    .row { display:flex; flex-wrap:wrap; gap:8px; }
+  </style>
+</head>
+<body>
+  <div class="grid">
+    <div class="card">
+      <h3 class="title"><i class="fa-solid fa-flask"></i> Units by Blood Group</h3>
+      <canvas id="bar"></canvas>
+    </div>
+    <div class="card">
+      <h3 class="title"><i class="fa-solid fa-chart-line"></i> Donations vs Issues (recent)</h3>
+      <canvas id="line"></canvas>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h3 class="title"><i class="fa-solid fa-triangle-exclamation"></i> Low Stock</h3>
+    <div class="row" id="low"></div>
+  </div>
+
+  <script>
+    const DATA = __DATA__; // injected
+    const ctx1 = document.getElementById('bar');
+    const bar = new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: DATA.stock.map(s => s.blood_group),
+        datasets: [{ label: 'Units', data: DATA.stock.map(s => s.units) }]
+      },
+      options: { responsive: true }
+    });
+
+    const days = Array.from(new Set([...Object.keys(DATA.donations), ...Object.keys(DATA.issues)])).sort();
+    const line = new Chart(document.getElementById('line'), {
+      type: 'line',
+      data: {
+        labels: days,
+        datasets: [
+          { label: 'Donations', data: days.map(d => DATA.donations[d] || 0) },
+          { label: 'Issues', data: days.map(d => DATA.issues[d] || 0) }
+        ]
+      },
+      options: { responsive: true }
+    });
+
+    const low = document.getElementById('low');
+    if (DATA.low_stock.length === 0) {
+      low.innerHTML = "<span>All good for now.</span>";
+    } else {
+      low.innerHTML = DATA.low_stock.map(g => `<span class='badge'>${g}</span>`).join('');
+    }
+  </script>
+</body>
+</html>

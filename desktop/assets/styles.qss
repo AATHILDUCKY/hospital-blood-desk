@@ -1,0 +1,38 @@
+/* Modern, soft UI */
+QMainWindow {
+  background: #f8fafc;
+  color: #0f172a;
+  font-family: 'Segoe UI', 'Inter', Arial;
+  font-size: 14px;
+}
+
+QPushButton {
+  background: #0ea5e9;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #0284c7;
+  min-height: 30px; 
+}
+QPushButton:hover { background: #38bdf8; }
+QPushButton:disabled { background: #cbd5e1; border-color: #cbd5e1; color: #334155; }
+
+QLineEdit, QComboBox, QTextEdit, QDateEdit, QSpinBox {
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 6px 8px;
+}
+
+QTableWidget {
+  background: white;
+  border: 1px solid #e2e8f0;
+  gridline-color: #e2e8f0;
+}
+QHeaderView::section {
+  background: #e2e8f0;
+  padding: 6px;
+  border: none;
+  border-right: 1px solid #cbd5e1;
+  font-weight: 600;
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Arial; background:#f8fafc; margin:0; padding:16px; color:#0f172a; }
+    .card { background: white; border-radius: 14px; box-shadow: 0 1px 2px rgba(0,0,0,.06); padding:16px; margin-bottom: 16px; }
+    .title { font-size: 18px; font-weight: 700; margin:0 0 8px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h3 class="title"><i class="fa-solid fa-signal"></i> 30-day Trend (Units Net Change)</h3>
+    <canvas id="trend"></canvas>
+  </div>
+
+  <script>
+    const DATA = __DATA__;
+    const days = Array.from(new Set([...Object.keys(DATA.donations), ...Object.keys(DATA.issues)])).sort();
+    const net = days.map(d => (DATA.donations[d] || 0) - (DATA.issues[d] || 0));
+    new Chart(document.getElementById('trend'), {
+      type: 'line',
+      data: { labels: days, datasets: [{ label: 'Net Units', data: net }] },
+      options: { responsive: true }
+    });
+  </script>
+</body>
+</html>
